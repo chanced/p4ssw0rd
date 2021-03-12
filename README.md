@@ -31,7 +31,8 @@ func main() {
 
     eval, err := pw.Evaluate(ctx, "password")
     if err != nil {
-        panic("this shouldn't error unless something goes wrong with connecting to haveibeenpwned")
+        // this shouldn't error unless something goes wrong with connecting to haveibeenpwned
+        panic(err)
     }
     _ = eval.Allowed // false because the limit exceeds BreachLimit
     _ = eval.BreachCount // 3861493 as of running this
@@ -45,7 +46,8 @@ func main() {
             _ = err.MinRequired // 6, as set by pw.MinPasswordLength
             _ = err.Length // 4
         } else {
-            panic("connection issues with haveibeenpwned")
+            //connection issues with haveibeenpwned
+            panic(err)
         }
     }
     err = pw.Validate(ctx, "password")

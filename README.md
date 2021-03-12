@@ -10,13 +10,13 @@ usage:
 package main
 
 import(
-    "github.com/chanced/pww0rd"
+    "github.com/chanced/p4ssw0rd"
 
 )
 
 func main() {
     ctx := context.Background()
-    pw, err := pww0rd.New(pww0rd.Config{
+    pw, err := p4ssw0rd.New(p4ssw0rd.Config{
         UserAgent:               "your site",
         MinPasswordLength:       6,    // defaults to 6
         BreachLimit:             10,   // defaults to 10
@@ -40,7 +40,7 @@ func main() {
     eval, err = pw.Evaluate(ctx, "pass")
     if err != nil {
         // err is a pwword.MinLengthError because len("pass") < pw.MinPasswordLength
-        var mlerr *pww0rd.MinLengthError
+        var mlerr *p4ssw0rd.MinLengthError
         if errors.As(err, &mlerr) {
             _ = err.MinRequired // 6, as set by pw.MinPasswordLength
             _ = err.Length // 4

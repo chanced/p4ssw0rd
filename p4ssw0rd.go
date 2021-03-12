@@ -193,8 +193,8 @@ func (p P4ssw0rd) queryPwned(ctx context.Context, v string) (uint32, error) {
 	if res == nil || res.Body == nil {
 		return 0, errors.New("haveibeenpwned response body was empty")
 	}
-	dr := brotli.NewReader(res.Body)
-	s := bufio.NewScanner(dr)
+	br := brotli.NewReader(res.Body)
+	s := bufio.NewScanner(br)
 	s.Split(bufio.ScanLines)
 	for s.Scan() {
 		t := s.Text()

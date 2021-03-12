@@ -39,7 +39,7 @@ func main() {
 
     eval, err = pw.Evaluate(ctx, "pass")
     if err != nil {
-        // err is a pwword.MinLengthError because len("pass") < pw.MinPasswordLength
+        // err is a p4ssw0rd.MinLengthError because len("pass") < pw.MinPasswordLength
         var mlerr *p4ssw0rd.MinLengthError
         if errors.As(err, &mlerr) {
             _ = err.MinRequired // 6, as set by pw.MinPasswordLength

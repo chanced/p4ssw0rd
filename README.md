@@ -2,8 +2,7 @@
 
 Go password strength validation utilizing the [have i been pwned?](https://haveibeenpwned.com/API/v3#SearchingPwnedPasswordsByRange) API
 
-Make sure you read and abide by the license]
-https://haveibeenpwned.com/API/v3#License
+Make sure you read and abide by their [license](https://haveibeenpwned.com/API/v3#License)
 
 usage:
 

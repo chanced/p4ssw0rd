@@ -29,7 +29,7 @@ func main() {
         panic(err)
     }
 
-    eval, err := pw.Eval(ctx, "password")
+    eval, err := pw.Evaluate(ctx, "password")
     if err != nil {
         panic("this shouldn't error unless something goes wrong with connecting to haveibeenpwned")
     }

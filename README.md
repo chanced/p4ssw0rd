@@ -1,4 +1,4 @@
-# pww0rd
+# p4ssw0rd
 
 Go password strength validation utilizing the [have i been pwned?](https://haveibeenpwned.com/API/v3#SearchingPwnedPasswordsByRange) API
 

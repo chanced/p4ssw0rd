@@ -58,13 +58,3 @@ func main() {
 }
 
 ```
-
-## Configuration:
-
-```go
-var (
- 	MinPasswordLength       uint16 = 7
-	BreachLimit             uint32 = 10
-	MaxPwnedRequestAttempts uint8  = 5
-)
-```

@@ -12,8 +12,10 @@ go get github.com/chanced/p4ssw0rd
 package main
 
 import(
-    "github.com/chanced/p4ssw0rd"
+	"context"
+	"errors"
 
+    "github.com/chanced/p4ssw0rd"
 )
 
 func main() {

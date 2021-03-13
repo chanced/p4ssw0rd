@@ -1,9 +1,30 @@
 package p4ssw0rd
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/dustin/go-humanize"
+)
+
+var (
+	// ErrMinLengthNotSatisfied indicates that a password does not meet the
+	// minimum length requirements
+	ErrMinLengthNotSatisfied = errors.New("minimum password length not satisfied")
+	// ErrBreachLimitExceeded indicates that the password's breach limit has
+	// been exceeded
+	ErrBreachLimitExceeded = errors.New("password breach limit exceeded")
+	// ErrMissingUserAgent is returned when a UserAgent is not specified
+	ErrMissingUserAgent = errors.New("UserAgent was not specified")
+	// ErrTooManyRequests occurs when have i been pwned returns a 429 this
+	// shouldn't happen per the docs: "There are 1,048,576 different hash
+	// prefixes between 00000 and FFFFF (16^5) and every single one will return
+	// HTTP 200; there is no circumstance in which the API should return HTTP
+	// 404."
+	ErrTooManyRequests = errors.New("error: too many requests — the rate limit has been exceeded")
+	// Service unavailable — usually returned by Cloudflare if the underlying
+	// service is not available
+	ErrServiceUnavailable = errors.New("error: service unavailable")
 )
 
 type Err struct {

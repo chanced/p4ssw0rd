@@ -36,7 +36,7 @@ func main() {
         // this shouldn't error unless something goes wrong with connecting to haveibeenpwned
         panic(err)
     }
-    _ = eval.Allowed // false because the limit exceeds BreachLimit
+    _ = eval.Allowed // false because the count of breaches this value has been involved in exceeds BreachLimit
     _ = eval.BreachCount // 3861493 as of running this
     _ = eval.Notes // ""; it will remain blank for now. Add your own notes in your handler
 

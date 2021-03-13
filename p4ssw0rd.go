@@ -65,14 +65,14 @@ type Config struct {
 	AddPadding bool
 }
 
-type P4ssw0rd struct {
+type Evaluator struct {
 	Config
 	client *http.Client
 }
 
-func New(config Config) (P4ssw0rd, error) {
+func New(config Config) (Evaluator, error) {
 	if len(config.UserAgent) == 0 {
-		return P4ssw0rd{}, ErrMissingUserAgent
+		return Evaluator{}, ErrMissingUserAgent
 	}
 	if config.MinPasswordLength == 0 {
 		config.MinPasswordLength = 6
@@ -83,11 +83,11 @@ func New(config Config) (P4ssw0rd, error) {
 	if config.MaxPwnedRequestAttempts == 0 {
 		config.MaxPwnedRequestAttempts = 3
 	}
-	return P4ssw0rd{Config: config, client: &http.Client{}}, nil
+	return Evaluator{Config: config, client: &http.Client{}}, nil
 }
 
 // Validate is like Evaluate but returns an error if the Evaluation fails (too many breaches)
-func (p P4ssw0rd) Validate(ctx context.Context, pw string) error {
+func (p Evaluator) Validate(ctx context.Context, pw string) error {
 	eval, err := p.Evaluate(ctx, pw)
 	if err != nil {
 		return err
@@ -101,7 +101,7 @@ func (p P4ssw0rd) Validate(ctx context.Context, pw string) error {
 // Evaluate evaluates a password, checking the haveibeenpwned database for
 // breaches. An error is returned if the password length is not long enough
 // or errors occurred while querying pwned or hashing the password
-func (p P4ssw0rd) Evaluate(ctx context.Context, password string) (Evaluation, error) {
+func (p Evaluator) Evaluate(ctx context.Context, password string) (Evaluation, error) {
 	l := len(password)
 	if l < int(p.MinPasswordLength) {
 		return Evaluation{Allowed: false}, newMinLengthError(p.MinPasswordLength, uint16(l))
@@ -113,7 +113,7 @@ func (p P4ssw0rd) Evaluate(ctx context.Context, password string) (Evaluation, er
 	return Evaluation{BreachCount: pwned, Allowed: pwned < p.BreachLimit}, nil
 }
 
-func (p P4ssw0rd) queryPwned(ctx context.Context, v string) (uint32, error) {
+func (p Evaluator) queryPwned(ctx context.Context, v string) (uint32, error) {
 	hash := sha1.New()
 	bv := []byte(v)
 	_, err := hash.Write(bv)

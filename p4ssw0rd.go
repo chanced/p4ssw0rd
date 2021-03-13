@@ -47,13 +47,16 @@ type Config struct {
 	// 	*required
 
 	UserAgent string
-	// Authorisation is required for all APIs that enable searching HIBP by
+
+	// This is not required, per the HaveIBeenPwned API documentation:
+	//
+	// "Authorization is required for all APIs that enable searching HIBP by
 	// email address, namely retrieving all breaches for an account and
-	// retrieving all pastes for an account.
+	// retrieving all pastes for an account."
 	//
 	// Leaving it as a config option for those with keys that would like to
-	// future-proof in the event their policy changes and requires an API key
-	// for non-.
+	// future-proof in the event their policy changes.
+	//
 	//
 	// https://haveibeenpwned.com/API/v3#Authorisation
 	APIKey string
@@ -90,7 +93,7 @@ func (p P4ssw0rd) Validate(ctx context.Context, pw string) error {
 		return err
 	}
 	if eval.BreachCount >= p.BreachLimit {
-		return NewBreachLimitError(eval.BreachCount)
+		return newBreachLimitError(eval.BreachCount)
 	}
 	return nil
 }
@@ -101,7 +104,7 @@ func (p P4ssw0rd) Validate(ctx context.Context, pw string) error {
 func (p P4ssw0rd) Evaluate(ctx context.Context, password string) (Evaluation, error) {
 	l := len(password)
 	if l < int(p.MinPasswordLength) {
-		return Evaluation{Allowed: false}, NewMinLengthError(p.MinPasswordLength, uint16(l))
+		return Evaluation{Allowed: false}, newMinLengthError(p.MinPasswordLength, uint16(l))
 	}
 	pwned, err := p.queryPwned(ctx, password)
 	if err != nil {

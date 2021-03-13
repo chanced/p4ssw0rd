@@ -6,6 +6,10 @@ Make sure you read and abide by their [license](https://haveibeenpwned.com/API/v
 
 usage:
 
+```bash
+go get github.com/chanced/p4ssw0rd
+```
+
 ```go
 package main
 
@@ -17,14 +21,14 @@ import(
 func main() {
     ctx := context.Background()
     pw, err := p4ssw0rd.New(p4ssw0rd.Config{
-        UserAgent:               "your site",
-        MinPasswordLength:       6,    // defaults to 6
-        BreachLimit:             10,   // defaults to 10
-        MaxPwnedRequestAttempts: 3,    // defaults to 3
-        AddPadding:              true, // defaults to false
+        UserAgent:               "your site", // required
+        MinPasswordLength:       6,           // default: 6
+        BreachLimit:             10,          // default: 10
+        MaxPwnedRequestAttempts: 3,           // default: 3
+        AddPadding:              false,       // default: false
     })
     if err != nil {
-        // only reason this would happen is if you didn't provide a user agent.
+        // The only reason this would happen is if you didn't provide a user agent.
         // see https://haveibeenpwned.com/API/v3#UserAgent
         panic(err)
     }

@@ -34,7 +34,7 @@ type Err struct {
 func (e *Err) Unwrap() error {
 	return e.Err
 }
-func NewBreachLimitError(count uint32) *BreachLimitError {
+func newBreachLimitError(count uint32) *BreachLimitError {
 	return &BreachLimitError{
 		Err:         Err{Err: ErrBreachLimitExceeded},
 		BreachCount: count,
@@ -59,7 +59,7 @@ type MinLengthError struct {
 	Length      uint16
 }
 
-func NewMinLengthError(required, length uint16) *MinLengthError {
+func newMinLengthError(required, length uint16) *MinLengthError {
 	return &MinLengthError{
 		Err:         Err{Err: ErrMinLengthNotSatisfied},
 		MinRequired: required,

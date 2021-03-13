@@ -27,16 +27,16 @@ var (
 	ErrServiceUnavailable = errors.New("error: service unavailable")
 )
 
-type err struct {
+type baseErr struct {
 	Err error
 }
 
-func (e *err) Unwrap() error {
+func (e *baseErr) Unwrap() error {
 	return e.Err
 }
 func newBreachLimitError(count uint32) *BreachLimitError {
 	return &BreachLimitError{
-		err:         err{Err: ErrBreachLimitExceeded},
+		baseErr:     baseErr{Err: ErrBreachLimitExceeded},
 		BreachCount: count,
 	}
 }
@@ -45,7 +45,7 @@ var _ error = (*BreachLimitError)(nil)
 var _ error = (*MinLengthError)(nil)
 
 type BreachLimitError struct {
-	err
+	baseErr
 	BreachCount uint32
 }
 
@@ -54,14 +54,14 @@ func (e *BreachLimitError) Error() string {
 }
 
 type MinLengthError struct {
-	err
+	baseErr
 	MinRequired uint16
 	Length      uint16
 }
 
 func newMinLengthError(required, length uint16) *MinLengthError {
 	return &MinLengthError{
-		err:         err{Err: ErrMinLengthNotSatisfied},
+		baseErr:     baseErr{Err: ErrMinLengthNotSatisfied},
 		MinRequired: required,
 		Length:      length,
 	}

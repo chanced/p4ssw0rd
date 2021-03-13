@@ -83,7 +83,7 @@ The way the package works is the password is hashed (SHA1) then the first 5 char
 01FFD148305A472EBCED1BF4E70089A0532:1
 ```
 
-If you're still concerned about a man in the middle snooping responses, you can turn on buffering which ensures that there are consistently 800 - 1,000 results. See https://haveibeenpwned.com/API/v3#PwnedPasswordsPadding
+If you're still concerned about a man in the middle snooping responses, you can turn on padding which ensures that there are consistently 800 - 1,000 results. See https://haveibeenpwned.com/API/v3#PwnedPasswordsPadding
 
 ## Documentation
 

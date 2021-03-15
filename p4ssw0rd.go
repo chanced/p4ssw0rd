@@ -65,14 +65,35 @@ type Config struct {
 	AddPadding bool
 }
 
-type Evaluator struct {
+// Evaluator defines the single func Evaluate which returns an Evaluation or
+// an error if the minimum length requirements are not satisfied.
+type Evaluator interface {
+	Evaluate(ctx context.Context, password string) (Evaluation, error)
+}
+
+// Validator defines the single func Validate which returns an error if the
+// provided password does not meet the length requirements or if the breach
+// count, obtained from the HIBP API, is exceeded.
+type Validator interface {
+	Validate(ctx context.Context, password string) error
+}
+
+// EvaluatorValidator is an interface comprised of both Validator and Evaluator
+type EvaluatorValidator interface {
+	Evaluator
+	Validator
+}
+
+var _ EvaluatorValidator = P4ssw0rd{}
+
+type P4ssw0rd struct {
 	Config
 	client *http.Client
 }
 
-func New(config Config) (Evaluator, error) {
+func New(config Config) (P4ssw0rd, error) {
 	if len(config.UserAgent) == 0 {
-		return Evaluator{}, ErrMissingUserAgent
+		return P4ssw0rd{}, ErrMissingUserAgent
 	}
 	if config.MinPasswordLength == 0 {
 		config.MinPasswordLength = 6
@@ -83,12 +104,12 @@ func New(config Config) (Evaluator, error) {
 	if config.MaxPwnedRequestAttempts == 0 {
 		config.MaxPwnedRequestAttempts = 3
 	}
-	return Evaluator{Config: config, client: &http.Client{}}, nil
+	return P4ssw0rd{Config: config, client: &http.Client{}}, nil
 }
 
 // Validate is like Evaluate but returns an error if the Evaluation fails (too many breaches)
-func (p Evaluator) Validate(ctx context.Context, pw string) error {
-	eval, err := p.Evaluate(ctx, pw)
+func (p P4ssw0rd) Validate(ctx context.Context, password string) error {
+	eval, err := p.Evaluate(ctx, password)
 	if err != nil {
 		return err
 	}
@@ -101,7 +122,7 @@ func (p Evaluator) Validate(ctx context.Context, pw string) error {
 // Evaluate evaluates a password, checking the haveibeenpwned database for
 // breaches. An error is returned if the password length is not long enough
 // or errors occurred while querying pwned or hashing the password
-func (p Evaluator) Evaluate(ctx context.Context, password string) (Evaluation, error) {
+func (p P4ssw0rd) Evaluate(ctx context.Context, password string) (Evaluation, error) {
 	l := len(password)
 	if l < int(p.MinPasswordLength) {
 		return Evaluation{Allowed: false}, newMinLengthError(p.MinPasswordLength, uint16(l))
@@ -113,7 +134,7 @@ func (p Evaluator) Evaluate(ctx context.Context, password string) (Evaluation, e
 	return Evaluation{BreachCount: pwned, Allowed: pwned < p.BreachLimit}, nil
 }
 
-func (p Evaluator) queryPwned(ctx context.Context, v string) (uint32, error) {
+func (p P4ssw0rd) queryPwned(ctx context.Context, v string) (uint32, error) {
 	hash := sha1.New()
 	bv := []byte(v)
 	_, err := hash.Write(bv)

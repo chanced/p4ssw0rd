@@ -35,7 +35,8 @@ func main() {
 
     eval, err := pw.Evaluate(ctx, "password")
     if err != nil {
-        // this shouldn't error unless something goes wrong with connecting to haveibeenpwned
+        // this shouldn't error unless something goes wrong with connecting to haveibeenpwned because
+        // "password" satisfies the min length requirement
         panic(err)
     }
     _ = eval.Allowed // false because the count of breaches this value has been involved in exceeds BreachLimit
@@ -66,7 +67,7 @@ func main() {
 
 ## Explanation
 
-The way the package works is the password is hashed (SHA1) then the first 5 characters of that are used to query the API. The result set contains the remainder of the hash, if the password is present, and the count of breaches it has been discovered in. The results look like this:
+The way the package works is the password is hashed (SHA1) then the first 5 characters of that are used to query the API. The result set contains the remainder of the hash, if the password is present, and the count of breaches it has been discovered in. The results from have i been pwned look like this:
 
 ```
 1E2AAA439972480CEC7F16C795BBB429372:1

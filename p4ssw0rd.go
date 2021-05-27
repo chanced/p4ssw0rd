@@ -209,8 +209,6 @@ func (p P4ssw0rd) queryPwned(ctx context.Context, v string) (uint32, error) {
 		if len(spl) != 2 {
 			continue
 		}
-		fmt.Println(t)
-
 		if spl[0] == suffix {
 			r, err := strconv.ParseUint(spl[1], 10, 32)
 			if err != nil {
